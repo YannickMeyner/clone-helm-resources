@@ -1,0 +1,53 @@
+
+{{- range .Values.chatbots }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.config.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/version: {{ .image.tag }}
+    app.kubernetes.io/component: chatbot
+    app.kubernetes.io/part-of: chatbot-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .name }}
+    spec:
+      containers:
+      - name: {{ .name }}
+        image: {{ .image.repository }}:{{ .image.tag }}
+        ports:
+        - containerPort: {{ .service.targetPort }}
+        {{- if .env }}
+        env:
+        {{- range .env }}
+        - name: {{ .name }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .secretName }}
+              key: {{ .secretKey }}
+        {{- end }}
+        {{- end }}
+        {{- if .configmap }}
+        volumeMounts:
+        - name: quarkus-config-volume
+          mountPath: /work/config
+        {{- end }}
+      {{- if .configmap }}
+      volumes:
+      - name: quarkus-config-volume
+        configMap:
+          name: {{ .name }}
+      {{- end }}
+      imagePullPolicy: {{ .image.pullPolicy | default "Always" }}
+      imagePullSecrets:
+      - name: acr-auth
+{{- end }}

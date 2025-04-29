@@ -1,0 +1,23 @@
+{{- range .Values.chatbots }}
+{{- if .configmap }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.config.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/version: {{ .image.tag }}
+    app.kubernetes.io/component: chatbot
+    app.kubernetes.io/part-of: chatbot-system
+data:
+  application.yaml: |-
+    app:
+      chatbots:
+        - name: fasty
+          url:  http://fastify-chatbot.{{ $.Values.config.namespace }}.svc.cluster.local/{{ .configmap.fastifyUrl }}
+        - name: dotty
+          url: http://dotnet-chatbot.{{ $.Values.config.namespace }}.svc.cluster.local/{{ .configmap.dotnetUrl }}
+{{- end }}
+{{- end }}

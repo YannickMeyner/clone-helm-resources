@@ -1,0 +1,42 @@
+config:
+  namespace: dev
+  acrBaseRepository: fs25group13.azurecr.io
+
+chatbots:
+  - name: connecting-worlds
+    image:
+      repository: fs25group13.azurecr.io/connecting-worlds
+      tag: latest
+      pullPolicy: Always
+    service:
+      port: 80
+      targetPort: 8080
+    configmap:
+      fastifyUrl: chat?message=
+      dotnetUrl: chat?message=
+
+  - name: dotnet-chatbot
+    image:
+      repository: fs25group13.azurecr.io/dotnet-chatbot
+      tag: latest
+      pullPolicy: Always
+    service:
+      port: 80
+      targetPort: 8080
+    env:
+      - name: HuggingFace__ApiKey
+        secretName: chatbot-api-keys
+        secretKey: dotnet-chatbot-api-key
+
+  - name: fastify-chatbot
+    image:
+      repository: fs25group13.azurecr.io/fastify-chatbot
+      tag: latest
+      pullPolicy: Always
+    service:
+      port: 80
+      targetPort: 3000
+    env:
+      - name: LLM_API_KEY
+        secretName: chatbot-api-keys
+        secretKey: fastify-chatbot-api-key
