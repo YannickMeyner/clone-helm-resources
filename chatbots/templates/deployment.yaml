@@ -24,6 +24,8 @@ spec:
       containers:
       - name: {{ .name }}
         image: {{ .image.repository }}:{{ .image.tag }}
+        resources:
+          {{- toYaml .resources | nindent 10 }}
         ports:
         - containerPort: {{ .service.targetPort }}
         {{- if .env }}

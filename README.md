@@ -43,6 +43,14 @@ The prod stage has always fixed versions. This is done manually at the moment. B
 helm upgrade --install chatbot-prod ./chatbots --namespace prod -f ./chatbots/values-prod.yaml
 ```
 
+### Verification
+To check the Quality of Service (QoS) class of the pods after deployment:
+```bash
+kubectl get pods -n dev --output=custom-columns=NAME:.metadata.name,QOS:.status.qosClass
+kubectl get pods -n staging --output=custom-columns=NAME:.metadata.name,QOS:.status.qosClass
+kubectl get pods -n prod --output=custom-columns=NAME:.metadata.name,QOS:.status.qosClass
+```
+This will show the QoS class (Guaranteed/**Burstable**/BestEffort) for all pods in each namespace.
 ## Scaling
 
 

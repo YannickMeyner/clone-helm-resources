@@ -8,6 +8,13 @@ chatbots:
       repository: fs25group13.azurecr.io/connecting-worlds
       tag: latest
       pullPolicy: Always
+    resources:
+      requests:
+        cpu: "1m"
+        memory: "150Mi"
+      limits:
+        cpu: "2m"
+        memory: "300Mi"
     service:
       port: 80
       targetPort: 8080
@@ -20,6 +27,13 @@ chatbots:
       repository: fs25group13.azurecr.io/dotnet-chatbot
       tag: latest
       pullPolicy: Always
+    resources:
+      requests:
+        cpu: "1m"
+        memory: "60Mi"
+      limits:
+        cpu: "2m"
+        memory: "120Mi"
     service:
       port: 80
       targetPort: 8080
@@ -33,6 +47,13 @@ chatbots:
       repository: fs25group13.azurecr.io/fastify-chatbot
       tag: latest
       pullPolicy: Always
+    resources:
+      requests:
+        cpu: "1m"
+        memory: "60Mi"
+      limits:
+        cpu: "2m"
+        memory: "120Mi"
     service:
       port: 80
       targetPort: 3000
