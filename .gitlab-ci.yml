@@ -1,0 +1,31 @@
+stages:
+  - mirror
+
+
+variables:
+  GIT_DEPTH: 0
+mirror_to_azure:
+  stage: mirror
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache git
+  script:
+    - git config --global user.email "ci-bot@students.fhnw.ch"
+    - git config --global user.name "CI Bot"
+    - export AZURE_REPO_URL="https://${AZURE_USERNAME}:${AZURE_PAT}@dev.azure.com/fhnw-devops/fs25-group13/_git/fs25-group13"
+    - |
+      if ! git remote get-url azure 2>/dev/null; then
+        git remote add azure "$AZURE_REPO_URL"
+      else
+        git remote set-url azure "$AZURE_REPO_URL"
+      fi
+    
+    # Make sure we are on main and have full history
+    - git fetch origin
+    - git checkout main || git checkout -b main origin/main
+    - git pull origin main
+
+    # Push all branches and tags to Azure
+    - git push azure --mirror
+  only:
+    - main 
