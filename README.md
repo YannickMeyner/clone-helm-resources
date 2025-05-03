@@ -10,6 +10,26 @@ To install or upgrade the monitoring stack use the following command from within
 helm  upgrade --install prometheus prometheus-community/kube-prometheus-stack  --namespace monitoring  --values .\values-devops.yaml  --set crds.install=true
 ```
 
+## Secret Management
+Secrets are securely managed using Kubernetes SealedSecrets. All credentials are encrypted and safe to store in version control.
+
+### Creating/Updating Secrets
+1. Install [kubeseal](https://github.com/bitnami-labs/sealed-secrets#installation)
+2. Create/update secrets using:
+```bash
+# For ACR credentials
+kubeseal --scope cluster-wide --cert=crt.pem -f acr-auth.yaml -o yaml > charts/chatbots/templates/acr-auth-sealedsecret.yaml
+
+# For chatbot API-Keys
+kubeseal --scope cluster-wide --cert=crt.pem -f chatbot-api-keys.yaml -o yaml > charts/chatbots/templates/chatbot-api-keys-sealedsecret.yaml
+```
+
+### Applying Secrets
+SealedSecrets are automatically applied with Helm deployments. Manual application:
+```bash
+kubectl apply -f charts/chatbots/templates/*-sealedsecret.yaml
+```
+
 ## Chatbots
 
 The chatbots and connecting world are always deployed together. 
