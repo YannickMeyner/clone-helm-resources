@@ -10,6 +10,29 @@ To install or upgrade the monitoring stack use the following command from within
 helm  upgrade --install prometheus prometheus-community/kube-prometheus-stack  --namespace monitoring  --values .\values-devops.yaml  --set crds.install=true
 ```
 
+## Continuous Deployment with Argo CD
+The project uses Argo CD for GitOps-based continuous deployment. 
+
+### Argo CD Installation
+```bash
+helm repo add argo https://argoproj.github.io/argo-helm
+helm upgrade --install argocd argo/argo-cd -n argocd --create-namespace --set ha.enabled=false
+```
+
+### Accessing the Argo CD GUI
+1. Port-forward the Argo CD server:
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+2. Open the GUI:  
+Navigate to https://localhost:8080 in your browser.
+3. Login credentials:
+   - Username: admin
+   - Password: Retrieve it with:
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
 ## Secret Management
 Secrets are securely managed using Kubernetes SealedSecrets. All credentials are encrypted and safe to store in version control.
 
