@@ -33,6 +33,19 @@ Navigate to https://localhost:8080 in your browser.
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
+### ArgoCD Applications
+The repository includes ArgoCD application definitions for each environment in the `argocd/applications`-directory. To deploy using ArgoCD:
+1. Create the required namespaces:
+   ```bash
+   kubectl create ns dev
+   kubectl create ns staging
+   kubectl create ns prod
+   ```
+2. Apply the ArgoCD application definitions:
+   ```bash
+   kubectl apply -f argocd/applications/
+   ```
+
 ## Secret Management
 Secrets are securely managed using Kubernetes SealedSecrets. All credentials are encrypted and safe to store in version control.
 

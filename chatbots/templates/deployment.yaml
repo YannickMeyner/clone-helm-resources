@@ -43,13 +43,14 @@ spec:
         - name: quarkus-config-volume
           mountPath: /work/config
         {{- end }}
+        imagePullPolicy: {{ .image.pullPolicy | default "Always" }}
       {{- if .configmap }}
       volumes:
       - name: quarkus-config-volume
         configMap:
           name: {{ .name }}
       {{- end }}
-      imagePullPolicy: {{ .image.pullPolicy | default "Always" }}
+
       imagePullSecrets:
       - name: acr-auth
 {{- end }}

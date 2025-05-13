@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "config:recommended"
+  ],
+  "helm-values": {
+    "managerFilePatterns": [
+      "/^chatbots/values-prod\\.ya?ml$/"
+    ]
+  },
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "fs25group13.azurecr.io/connecting-worlds",
+        "fs25group13.azurecr.io/dotnet-chatbot",
+        "fs25group13.azurecr.io/fastify-chatbot"
+      ],
+      "matchManagers": [
+        "helm-values"
+      ],
+      "groupName": "Update chatbot images"
+    }
+  ]
+}
