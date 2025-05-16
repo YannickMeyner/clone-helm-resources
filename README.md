@@ -46,6 +46,26 @@ The repository includes ArgoCD application definitions for each environment in t
    kubectl apply -f argocd/applications/
    ```
 
+## Continuous Deployment with Keel
+The project uses [Keel](https://keel.sh/) for automatic image updates in dev and staging environments.
+
+### Keel Installation
+```bash
+helm repo add keel https://charts.keel.sh 
+helm upgrade --install keel keel/keel -n keel --create-namespace --set service.type=ClusterIP
+```
+
+### How it works
+- **Dev environment**: Automatically pulls and deploys `latest` tags every 5 minutes
+- **Staging environment**: Automatically pulls and deploys `stable` tags every 10 minutes  
+- **Prod environment**: Manual deployment with fixed version tags
+
+### Monitoring Keel
+```bash
+# Check Keel logs
+kubectl logs -n keel deployment/keel
+
+
 ## Secret Management
 Secrets are securely managed using Kubernetes SealedSecrets. All credentials are encrypted and safe to store in version control.
 

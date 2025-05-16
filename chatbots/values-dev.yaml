@@ -8,6 +8,10 @@ chatbots:
       repository: fs25group13.azurecr.io/connecting-worlds
       tag: latest
       pullPolicy: Always
+    keel:
+      policy: "force"
+      trigger: "poll"
+      pollSchedule: "@every 5m"
     resources:
       requests:
         cpu: "1m"
@@ -40,6 +44,10 @@ chatbots:
       repository: fs25group13.azurecr.io/dotnet-chatbot
       tag: latest
       pullPolicy: Always
+    keel:
+      policy: "force"
+      trigger: "poll"
+      pollSchedule: "@every 5m"
     resources:
       requests:
         cpu: "1m"
@@ -73,6 +81,10 @@ chatbots:
       repository: fs25group13.azurecr.io/fastify-chatbot
       tag: latest
       pullPolicy: Always
+    keel:
+      policy: "force"
+      trigger: "poll"
+      pollSchedule: "@every 5m"
     resources:
       requests:
         cpu: "1m"

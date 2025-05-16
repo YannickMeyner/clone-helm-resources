@@ -11,6 +11,18 @@ metadata:
     app.kubernetes.io/version: {{ .image.tag }}
     app.kubernetes.io/component: chatbot
     app.kubernetes.io/part-of: chatbot-system
+  {{- if .keel }}
+  annotations:
+    {{- if .keel.policy }}
+    keel.sh/policy: {{ .keel.policy | quote }}
+    {{- end }}
+    {{- if .keel.trigger }}
+    keel.sh/trigger: {{ .keel.trigger | quote }}
+    {{- end }}
+    {{- if .keel.pollSchedule }}
+    keel.sh/pollSchedule: {{ .keel.pollSchedule | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
