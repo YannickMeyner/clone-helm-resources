@@ -80,7 +80,23 @@ kubeseal --scope cluster-wide --cert=crt.pem -f acr-auth.yaml -o yaml > charts/c
 kubeseal --scope cluster-wide --cert=crt.pem -f chatbot-api-keys.yaml -o yaml > charts/chatbots/templates/chatbot-api-keys-sealedsecret.yaml
 ```
 
-### Applying Secrets
+## Deployment Strategy
+The project uses **Rolling Deployment** for zero-downtime updates:
+```yaml
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1        # max 1 additional pod during update
+    maxUnavailable: 0  # zero downtime --> no pods can be unavailable
+```
+
+### Benefits
+- **Zero Downtime**: service remains available during updates
+- **Resource Efficient**: only temporary +1 pod overhead
+- **Built-in Rollback**: easy rollback with `kubectl rollout undo`
+- **Perfect for stateless services**: ideal for our microservices architecture
+
+## Applying Secrets
 SealedSecrets are automatically applied with Helm deployments. Manual application:
 ```bash
 kubectl apply -f charts/chatbots/templates/*-sealedsecret.yaml
