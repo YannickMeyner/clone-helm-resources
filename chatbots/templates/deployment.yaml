@@ -43,6 +43,22 @@ spec:
         - name: quarkus-config-volume
           mountPath: /work/config
         {{- end }}
+        livenessProbe:
+          httpGet:
+            path: {{ .probes.liveness.path }}
+            port: {{ .service.targetPort }}
+          initialDelaySeconds: {{ .probes.liveness.initialDelaySeconds | default 30 }}
+          periodSeconds: {{ .probes.liveness.periodSeconds | default 10 }}
+          timeoutSeconds: {{ .probes.liveness.timeoutSeconds | default 5 }}
+          failureThreshold: {{ .probes.liveness.failureThreshold | default 3 }}
+        readinessProbe:
+          httpGet:
+            path: {{ .probes.readiness.path | default "/health" }}
+            port: {{ .service.targetPort }}
+          initialDelaySeconds: {{ .probes.readiness.initialDelaySeconds | default 10 }}
+          periodSeconds: {{ .probes.readiness.periodSeconds | default 5 }}
+          timeoutSeconds: {{ .probes.readiness.timeoutSeconds | default 3 }}
+          failureThreshold: {{ .probes.readiness.failureThreshold | default 3 }}
         imagePullPolicy: {{ .image.pullPolicy | default "Always" }}
       {{- if .configmap }}
       volumes:
