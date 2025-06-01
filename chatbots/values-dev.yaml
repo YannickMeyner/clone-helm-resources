@@ -28,15 +28,15 @@ chatbots:
     probes:
       liveness:
         path: /q/health/live
-        initialDelaySeconds: 120
+        initialDelaySeconds: 300
         periodSeconds: 30
         timeoutSeconds: 10
         failureThreshold: 5
       readiness:
         path: /q/health/ready
-        initialDelaySeconds: 60
-        periodSeconds: 10
-        timeoutSeconds: 5
+        initialDelaySeconds: 300
+        periodSeconds: 30
+        timeoutSeconds: 10
         failureThreshold: 5
 
   - name: dotnet-chatbot
@@ -65,15 +65,15 @@ chatbots:
     probes:
       liveness:
         path: /liveness
-        initialDelaySeconds: 30
-        periodSeconds: 10
+        initialDelaySeconds: 60
+        periodSeconds: 20
         timeoutSeconds: 5
         failureThreshold: 3
       readiness:
         path: /readiness
-        initialDelaySeconds: 10
-        periodSeconds: 5
-        timeoutSeconds: 3
+        initialDelaySeconds: 60
+        periodSeconds: 20
+        timeoutSeconds: 5
         failureThreshold: 3
 
   - name: fastify-chatbot
@@ -102,13 +102,13 @@ chatbots:
     probes:
       liveness:
         path: /healthz
-        initialDelaySeconds: 30
-        periodSeconds: 10
+        initialDelaySeconds: 60
+        periodSeconds: 20
         timeoutSeconds: 5
         failureThreshold: 3
       readiness:
         path: /readyz
-        initialDelaySeconds: 10
-        periodSeconds: 5
-        timeoutSeconds: 3
+        initialDelaySeconds: 60
+        periodSeconds: 20
+        timeoutSeconds: 5
         failureThreshold: 3
